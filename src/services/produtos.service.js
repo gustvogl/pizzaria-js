@@ -1,69 +1,68 @@
-import { supabase } from '../database.js';
+import { supabase } from './supabase.js';
 
-const TABELA = 'produtos';
-
-export async function listarProdutos() {
+export async function getAllProdutos() {
   const { data, error } = await supabase
-    .from(TABELA)
-    .select('*')
-    .order('id', { ascending: true });
+    .from('produtos')
+    .select('*');
 
-  if (error) throw error;
-  return data;
-}
-
-export async function buscarProdutoPorId(id) {
-  const { data, error } = await supabase
-    .from(TABELA)
-    .select('*')
-    .eq('id', id)
-    .maybeSingle();
-
-  if (error) throw error;
-  return data;
-}
-
-export async function criarProduto(produto) {
-  const { data, error } = await supabase
-    .from(TABELA)
-    .insert(produto)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-export async function atualizarProduto(id, produto) {
-  const produtoExiste = await buscarProdutoPorId(id);
-
-  if (!produtoExiste) {
-    return null;
+  if (error) {
+    throw error;
   }
 
+  return data;
+}
+
+export async function getProdutoById(id) {
   const { data, error } = await supabase
-    .from(TABELA)
+    .from('produtos')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function createProduto(produto) {
+  const { data, error } = await supabase
+    .from('produtos')
+    .insert([produto])
+    .select();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateProduto(id, produto) {
+  const { data, error } = await supabase
+    .from('produtos')
     .update(produto)
     .eq('id', id)
-    .select()
-    .single();
+    .select();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
+
   return data;
 }
 
-export async function deletarProduto(id) {
-  const produtoExiste = await buscarProdutoPorId(id);
+export async function deleteProduto(id) {
+  const { data, error } = await supabase
+    .from('produtos')
+    .delete()
+    .eq('id', id)
+    .select();
 
-  if (!produtoExiste) {
-    return null;
+  if (error) {
+    throw error;
   }
 
-  const { error } = await supabase
-    .from(TABELA)
-    .delete()
-    .eq('id', id);
-
-  if (error) throw error;
-  return produtoExiste;
+  return data;
 }
