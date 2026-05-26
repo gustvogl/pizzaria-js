@@ -14,19 +14,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    mensagem: 'API da Pizzaria funcionando',
-    rotas: {
-      categorias: {
-        listar: 'GET /api/categorias'
-      },
-      produtos: {
-        listar: 'GET /api/produtos',
-        buscarPorId: 'GET /api/produtos/:id',
-        criar: 'POST /api/produtos',
-        atualizar: 'PUT /api/produtos/:id',
-        deletar: 'DELETE /api/produtos/:id'
-      }
-    }
+    mensagem: 'API da Pizzaria funcionando'
   });
 });
 
